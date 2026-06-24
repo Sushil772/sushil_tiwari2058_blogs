@@ -1,0 +1,215 @@
+{% comment %} <!doctype html>
+<html>
+  <head>
+    <title>Register</title>
+
+    <!-- Bootstrap -->
+    <link
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css"
+      rel="stylesheet"
+    />
+
+    <style>
+      body {
+        background: linear-gradient(135deg, #74ebd5, #acb6e5);
+        font-family: Arial, sans-serif;
+        height: 100vh;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+      }
+
+      .register-box {
+        background: white;
+        padding: 30px;
+        border-radius: 15px;
+        width: 400px;
+        box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
+        transition: 0.3s;
+      }
+
+      .register-box:hover {
+        transform: scale(1.02);
+      }
+
+      h1 {
+        text-align: center;
+        margin-bottom: 20px;
+        font-weight: bold;
+      }
+
+      button {
+        width: 100%;
+        transition: 0.3s;
+      }
+
+      button:hover {
+        transform: scale(1.05);
+      }
+
+      .error-box {
+        color: red;
+        font-size: 14px;
+        margin-top: 10px;
+      }
+    </style>
+  </head>
+
+  <body>
+    <div class="register-box">
+      <h1>Create Account</h1>
+
+      <form method="POST">
+        {% csrf_token %} {{ form.as_p }}
+
+        <button type="submit" class="btn btn-primary">Register</button>
+      </form>
+
+      <div class="error-box">{{ form.errors }}</div>
+
+      <!-- ✅ ADDED LOGIN LINK (AS REQUESTED) -->
+      <div class="text-center mt-3">
+        <small>
+          Already have an account?
+          <a href="{% url 'login' %}" class="text-primary fw-bold"
+            >Login here</a
+          >
+        </small>
+      </div>
+    </div>
+
+    <!-- JavaScript (small animation effect) -->
+    <script>
+      document.addEventListener("DOMContentLoaded", function () {
+        const box = document.querySelector(".register-box");
+        box.style.opacity = "0";
+        box.style.transform = "translateY(30px)";
+
+        setTimeout(() => {
+          box.style.transition = "0.6s ease";
+          box.style.opacity = "1";
+          box.style.transform = "translateY(0)";
+        }, 100);
+      });
+    </script>
+  </body>
+</html>
+{% endcomment %}
+
+<!doctype html>
+<html>
+  <head>
+    <title>Register</title>
+
+    <link
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css"
+      rel="stylesheet"
+    />
+
+    <style>
+      body {
+        margin: 0;
+        padding: 0;
+        font-family: Arial;
+        background: linear-gradient(135deg, #e0eafc, #cfdef3);
+        min-height: 100vh;
+
+        display: flex;
+        align-items: center;
+        justify-content: center;
+      }
+
+      .container-box {
+        width: 100%;
+        max-width: 600px;
+        background: white;
+        padding: 40px;
+        border-radius: 20px;
+        box-shadow: 0 15px 40px rgba(0, 0, 0, 0.2);
+      }
+
+      h1 {
+        text-align: center;
+        font-weight: bold;
+        margin-bottom: 25px;
+      }
+
+      /* Django form styling */
+      form p {
+        margin-bottom: 15px;
+      }
+
+      input {
+        width: 100%;
+        padding: 10px;
+        border-radius: 10px;
+        border: 1px solid #ddd;
+        outline: none;
+        font-size: 15px;
+      }
+
+      input:focus {
+        border-color: #0d6efd;
+        box-shadow: 0 0 5px rgba(13, 110, 253, 0.3);
+      }
+
+      button {
+        width: 100%;
+        border-radius: 10px;
+        padding: 12px;
+        font-weight: bold;
+        background: #198754;
+        border: none;
+        color: white;
+        transition: 0.3s;
+        margin-top: 10px;
+      }
+
+      button:hover {
+        transform: scale(1.02);
+        background: #157347;
+      }
+
+      .error-box {
+        margin-top: 10px;
+        color: red;
+        font-size: 14px;
+        text-align: center;
+      }
+
+      .login-link {
+        text-align: center;
+        margin-top: 15px;
+      }
+
+      .login-link a {
+        text-decoration: none;
+        font-weight: bold;
+        color: #0d6efd;
+      }
+
+      .login-link a:hover {
+        text-decoration: underline;
+      }
+    </style>
+  </head>
+
+  <body>
+    <div class="container-box">
+      <h1>Create Account</h1>
+
+      <form method="POST">
+        {% csrf_token %} {{ form.as_p }}
+
+        <button type="submit">Register 🚀</button>
+      </form>
+
+      <div class="error-box">{{ form.errors }}</div>
+
+      <div class="login-link">
+        Already have an account?
+        <a href="{% url 'login' %}">Login here</a>
+      </div>
+    </div>
+  </body>
+</html>

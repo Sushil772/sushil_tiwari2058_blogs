@@ -1,0 +1,317 @@
+{% comment %} <!doctype html>
+<html>
+  <head>
+    <title>Create Post</title>
+
+    <link
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css"
+      rel="stylesheet"
+    />
+
+    <style>
+      body {
+        margin: 0;
+        padding: 0;
+        font-family: Arial;
+        background: linear-gradient(135deg, #e0eafc, #cfdef3);
+        min-height: 100vh;
+      }
+
+      .container-box {
+        width: 100%;
+        min-height: 100vh;
+        background: white;
+        padding: 60px 20%;
+        box-sizing: border-box;
+      }
+
+      h2 {
+        font-weight: bold;
+        margin-bottom: 30px;
+        text-align: center;
+      }
+
+      label {
+        font-weight: bold;
+        margin-top: 15px;
+      }
+
+      .form-control {
+        border-radius: 10px;
+        padding: 12px;
+        font-size: 16px;
+      }
+
+      textarea {
+        resize: none;
+        height: 140px;
+        width: 100%;
+      }
+
+      .btn-success {
+        border-radius: 10px;
+        padding: 12px;
+        font-weight: bold;
+        margin-top: 20px;
+      }
+
+      .back-btn {
+        display: inline-block;
+        margin-bottom: 20px;
+        text-decoration: none;
+      }
+
+      .back-btn button {
+        border: none;
+        padding: 8px 15px;
+        border-radius: 8px;
+        background: #eee;
+        cursor: pointer;
+      }
+
+      .back-btn button:hover {
+        background: #ddd;
+      }
+
+      @media (max-width: 768px) {
+        .container-box {
+          padding: 30px 15px;
+        }
+      }
+    </style>
+  </head>
+
+  <body>
+    <div class="container-box">
+      <h2>✍ Create New Post</h2>
+
+      <a href="/" class="back-btn">
+        <button>← Back</button>
+      </a>
+
+      <form method="POST" enctype="multipart/form-data">
+        {% csrf_token %}
+
+        <!-- TITLE -->
+        <label>Title</label>
+        <input
+          type="text"
+          name="title"
+          class="form-control"
+          placeholder="Enter post title"
+          required
+        />
+
+        <!-- CONTENT -->
+        <label>Content</label>
+        <textarea
+          name="content"
+          class="form-control"
+          placeholder="Write your content here..."
+          required
+        ></textarea>
+
+        <!-- IMAGE -->
+        <label>Image</label>
+        <input type="file" name="image" class="form-control" accept="image/*" />
+
+        <!-- CATEGORY (SINGLE SMART BOX) -->
+        <label>Category</label>
+
+        <input
+          type="text"
+          name="category"
+          class="form-control"
+          placeholder="Type or select category"
+          list="categoryList"
+          required
+        />
+
+        <datalist id="categoryList">
+          {% for category in categories %}
+          <option value="{{ category.name }}"></option>
+          {% endfor %}
+        </datalist>
+
+        <button class="btn btn-success w-100">Publish Post 🚀</button>
+      </form>
+    </div>
+  </body>
+</html>
+{% endcomment %}
+
+<!doctype html>
+<html>
+  <head>
+    <title>{% if edit_mode %}Edit Post{% else %}Create Post{% endif %}</title>
+
+    <link
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css"
+      rel="stylesheet"
+    />
+
+    <style>
+      body {
+        margin: 0;
+        padding: 0;
+        font-family: Arial, sans-serif;
+        background: linear-gradient(135deg, #e0eafc, #cfdef3);
+        min-height: 100vh;
+      }
+
+      .container-box {
+        width: 100%;
+        min-height: 100vh;
+        padding: 50px 18%;
+        box-sizing: border-box;
+      }
+
+      .form-box {
+        background: white;
+        padding: 40px;
+        border-radius: 20px;
+        box-shadow: 0 15px 40px rgba(0, 0, 0, 0.15);
+      }
+
+      h2 {
+        text-align: center;
+        font-weight: bold;
+        margin-bottom: 25px;
+        color: #2c3e50;
+      }
+
+      label {
+        font-weight: bold;
+        margin-top: 15px;
+        margin-bottom: 6px;
+      }
+
+      .form-control {
+        border-radius: 10px;
+        padding: 12px;
+        border: 2px solid #e9ecef;
+      }
+
+      .form-control:focus {
+        border-color: #4f8cff;
+        box-shadow: 0 0 10px rgba(79, 140, 255, 0.2);
+      }
+
+      textarea {
+        height: 140px;
+        resize: none;
+      }
+
+      .btn {
+        border-radius: 12px;
+        padding: 12px;
+        font-weight: bold;
+        margin-top: 20px;
+      }
+
+      .back-btn {
+        display: inline-block;
+        margin-bottom: 15px;
+        text-decoration: none;
+      }
+
+      .back-btn button {
+        border: none;
+        padding: 8px 15px;
+        border-radius: 8px;
+        background: #eee;
+      }
+
+      .back-btn button:hover {
+        background: #ddd;
+      }
+
+      .current-img img {
+        width: 220px;
+        border-radius: 12px;
+        box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+        margin-top: 5px;
+      }
+    </style>
+  </head>
+
+  <body>
+    <div class="container-box">
+      <a href="/" class="back-btn">
+        <button type="button">← Back</button>
+      </a>
+
+      <div class="form-box">
+        <h2>
+          {% if edit_mode %} ✏️ Edit Post {% else %} ✍ Create New Post {%endif%}
+        </h2>
+
+        <form method="POST" enctype="multipart/form-data">
+          {% csrf_token %}
+
+          <!-- TITLE -->
+          <label>Title</label>
+          <input
+            type="text"
+            name="title"
+            class="form-control"
+            value="{% if edit_mode %}{{ post.title }}{% endif %}"
+            required
+          />
+
+          <!-- CONTENT -->
+          <label>Content</label>
+          <textarea name="content" class="form-control" required>
+{% if edit_mode %}{{ post.content }}{% endif %}
+          </textarea>
+
+          <!-- IMAGE -->
+          <label>Image</label>
+
+          {% if edit_mode and post.image %}
+          <div class="current-img">
+            <small><b>Current Image:</b></small
+            ><br />
+            <img src="{{ post.image.url }}" />
+          </div>
+          {% endif %}
+
+          <input
+            type="file"
+            name="image"
+            class="form-control"
+            accept="image/*"
+          />
+
+          <!-- CATEGORY -->
+          <label>Category</label>
+          <input
+            type="text"
+            name="category"
+            class="form-control"
+            list="categoryList"
+            value="{% if edit_mode %}{{ post.category.name }}{% endif %}"
+            required
+          />
+
+          <datalist id="categoryList">
+            {% for category in categories %}
+            <option value="{{ category.name }}"></option>
+            {% endfor %}
+          </datalist>
+
+          <!-- BUTTON -->
+          {% if edit_mode %}
+          <button type="submit" class="btn btn-warning w-100">
+            Update Post ✏️
+          </button>
+          {% else %}
+          <button type="submit" class="btn btn-success w-100">
+            Publish Post 🚀
+          </button>
+          {% endif %}
+        </form>
+      </div>
+    </div>
+  </body>
+</html>
